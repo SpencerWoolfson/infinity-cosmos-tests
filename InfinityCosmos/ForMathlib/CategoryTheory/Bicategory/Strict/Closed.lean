@@ -1,5 +1,7 @@
 import Mathlib.CategoryTheory.Monoidal.Cartesian.Cat
 import Mathlib.CategoryTheory.Closed.Monoidal
+import Mathlib.CategoryTheory.Bicategory.Strict.Pseudofunctor
+import Mathlib.CategoryTheory.Bicategory.NaturalTransformation.Pseudo
 
 universe v v' u u'
 
@@ -34,5 +36,30 @@ class Strict.CartesianMonoidal extends CartesianMonoidalCategory C where
   isMonoidal (Z : C) : ((HomFunctor C).obj (Opposite.op Z) : C ⥤ Cat).Monoidal
 
 class Strict.CartesianClosed extends Strict.CartesianMonoidal C, MonoidalClosed C
+
+-- def Strict.coyonedaEquiv {X : C} {F : C  ⥤ᵖ Cat} : (Pseudofunctor.StrongTrans (HomFunctor.obj (op X)) F) ≃ F.obj X where
+  -- toFun η := η.app X (𝟙 X)
+  -- invFun ξ := { app := fun _ x ↦ F.map x ξ }
+  -- left_inv := fun η ↦ by
+  --   ext Y (x : X ⟶ Y)
+  --   dsimp
+  --   rw [← FunctorToTypes.naturality]
+  --   simp
+  -- right_inv := by intro ξ; simp
+
+
+
+
+def Strict.prod' [Strict.CartesianMonoidal C] (x : C) : C ⥤ᵖ C where
+  obj y := MonoidalCategoryStruct.tensorObj x y
+  map f := MonoidalCategoryStruct.tensorHom (𝟙 x) f
+  map₂ {y z}  := by
+    let ca := ((HomFunctor C).obj (Opposite.op (MonoidalCategoryStruct.tensorObj x y))).obj ((MonoidalCategoryStruct.tensorObj x z))
+
+
+
+  
+
+
 
 end CategoryTheory.Bicategory
