@@ -42,35 +42,27 @@ instance : CategoryStruct (A ⥤² B) where
 
 instance (F G : A ⥤² B): Category (F ⟶ G) := Pseudofunctor.StrongTrans.homCategory
 
--- lemma app_dist {a b c : A ⥤² B} (f : a ⟶ b) (g : b ⟶ c) : (f ≫ g).app = fun x => f.app x ≫ g.app x := by
---   exact rfl
-
-#check Iso
-
-instance : Bicategory (A ⥤² B) where
-  whiskerLeft {a b c} f g h η := by
-    fconstructor
-    fconstructor
-    . intro d
-      refine f.app d ◁ ?_
-      exact η.as.app d
-    . intros d k t
-      rcases a with ⟨a⟩
-      rcases b with ⟨b⟩
-      rcases c with ⟨c⟩
-      rcases η with ⟨⟨ηa,ηn⟩⟩
-      simp
-      simp at ηn
-      simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
-      simp [<- Category.assoc]
-      rw [associator_inv_naturality_right,Strict.associator_eqToIso]
-      simp [Category.assoc,Strict.associator_eqToIso]
-      simp [<- Category.assoc]
-      congr 2
-      .
-
-
-
+instance : Bicategory (A ⥤² B) := sorry
+  -- whiskerLeft {a b c} f g h η := by
+  --   fconstructor
+  --   fconstructor
+  --   . intro d
+  --     refine f.app d ◁ ?_
+  --     exact η.as.app d
+  --   . intros d k t
+  --     rcases a with ⟨a⟩
+  --     rcases b with ⟨b⟩
+  --     rcases c with ⟨c⟩
+  --     rcases η with ⟨⟨ηa,ηn⟩⟩
+  --     simp
+  --     simp at ηn
+  --     simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
+  --     simp [<- Category.assoc]
+  --     rw [associator_inv_naturality_right,Strict.associator_eqToIso]
+  --     simp [Category.assoc,Strict.associator_eqToIso]
+  --     simp [<- Category.assoc]
+  --     congr 2
+  --     . sorry
 
       -- rw [associator_inv_naturality_left]
 
@@ -84,59 +76,28 @@ instance : Bicategory (A ⥤² B) where
       -- rw [<-help]
       -- simp
 
-
-
-
-
-
-
-
-
-
-      let attm1 := Pseudofunctor.StrongTrans.Modification.whiskerLeft_naturality η.as (f.app d) t
-      let s1 :=  η.as.naturality t
-      let s2 : a.obj d ⟶ b.obj d := f.app d
-      let s3 := congr_arg (fun x => s2 ◁ x) s1
-      simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
-      simp [Bicategory.Strict.associator_eqToIso]
-      rw [<- Category.assoc (f.app d ◁ (g.naturality t).hom)]
+      -- let attm1 := Pseudofunctor.StrongTrans.Modification.whiskerLeft_naturality η.as (f.app d) t
+      -- let s1 :=  η.as.naturality t
+      -- let s2 : a.obj d ⟶ b.obj d := f.app d
+      -- let s3 := congr_arg (fun x => s2 ◁ x) s1
+      -- simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
+      -- simp [Bicategory.Strict.associator_eqToIso]
+      -- rw [<- Category.assoc (f.app d ◁ (g.naturality t).hom)]
+      -- -- rw [<- attm1]
+      -- simp at s3
+      -- simp [<- Category.assoc]
+      -- congr 1
+      -- simp [Category.assoc]
       -- rw [<- attm1]
-      simp at s3
-      simp [<- Category.assoc]
-      congr 1
-      simp [Category.assoc]
-      rw [<- attm1]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
-      congr 1
-      rcases f with ⟨fa,fb,fc,fd,fe⟩
-      simp
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- rw [<- Category.assoc _ _ (f.app d ◁ (h.naturality t).hom)]
+      -- congr 1
+      -- rcases f with ⟨fa,fb,fc,fd,fe⟩
+      -- simp
 
       -- dsimp [s2] at s3
       -- rw [whiskerLeft_comp (f.app d) (b.map t ◁ η.as.app k) ((h.naturality t).hom),attm1] at s3
