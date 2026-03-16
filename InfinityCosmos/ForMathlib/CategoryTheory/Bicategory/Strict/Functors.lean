@@ -42,8 +42,114 @@ instance : CategoryStruct (A ⥤² B) where
 
 instance (F G : A ⥤² B): Category (F ⟶ G) := Pseudofunctor.StrongTrans.homCategory
 
-instance : Bicategory (A ⥤² B) := sorry
-  -- whiskerLeft {a b c} f g h η := by
+instance : Bicategory (A ⥤² B) where
+  whiskerLeft {a b c} f g h η := by
+    fconstructor
+    fconstructor
+    . exact fun d => f.app d ◁ (η.as.app d)
+    . intros d k t
+      rcases a with ⟨a⟩
+      rcases b with ⟨b⟩
+      rcases c with ⟨c⟩
+      rcases η with ⟨⟨ηa,ηn⟩⟩
+      simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
+      let ηn1 := ηn t
+      let lemma1 : f.app d ◁ (g.naturality t).hom ≫ f.app d ◁ ηa d ▷ c.map t ≫ (α_ (f.app d) (h.app d) (c.map t)).inv = f.app d ◁ ((g.naturality t).hom ≫ ηa d ▷ c.map t) ≫ (α_ (f.app d) (h.app d) (c.map t)).inv := by
+        exact Eq.symm (whiskerLeft_comp_assoc (f.app d) (g.naturality t).hom (ηa d ▷ c.map t) (α_ (f.app d) (h.app d) (c.map t)).inv)
+      rw [lemma1, <- ηn1]
+      simp only [<- Category.assoc, associator_inv_naturality_right]
+      refine
+        (Iso.cancel_iso_inv_right
+              (((((α_ (a.map t) (f.app k) (g.app k)).inv ≫ (a.map t ≫ f.app k) ◁ ηa k) ≫
+                    (f.naturality t).hom ▷ h.app k) ≫
+                  (α_ (f.app d) (b.map t) (h.app k)).hom) ≫
+                f.app d ◁ (h.naturality t).hom)
+              ((((α_ (a.map t) (f.app k) (g.app k)).inv ≫ (f.naturality t).hom ▷ g.app k) ≫
+                  (α_ (f.app d) (b.map t) (g.app k)).hom) ≫
+                f.app d ◁ (b.map t ◁ ηa k ≫ (h.naturality t).hom))
+              (α_ (f.app d) (h.app d) (c.map t))).mpr
+          ?_
+      simp [<- Category.assoc]
+      congr 1
+      simp only [associator_inv_naturality_right, Category.assoc]
+      congr 1
+      simp only [<- associator_naturality_right]
+      exact whisker_exchange_assoc (f.naturality t).hom (ηa k) (α_ (f.app d) (b.map t) (h.app k)).hom
+  whiskerRight {a b c f g } η γ := by sorry
+    -- fconstructor
+    -- fconstructor
+    -- . exact fun d => (η.as.app d) ▷ γ.app d 
+    -- . intros d k t
+    --   rcases a with ⟨a⟩
+    --   rcases b with ⟨b⟩
+    --   rcases c with ⟨c⟩
+    --   rcases η with ⟨⟨ηa,ηn⟩⟩
+    --   simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp]
+    --   let ηn1 := ηn t
+    --   simp at ηn1
+    --   rw [<- Category.assoc, associator_inv_naturality_middle, Category.assoc]
+    --   congr 1
+    --   rw [<- associator_inv_naturality_left, <- Category.assoc,<- Category.assoc]
+    --   simp only [associator_inv_naturality_middle]
+  associator {a b c d} f g h := by
+    fconstructor
+    . fconstructor
+      fconstructor
+      intro x
+      refine (Bicategory.associator (f.app x) (g.app x) (h.app x)).hom
+      intros x y l
+      simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp,Oplax.OplaxTrans.vcomp]
+    . fconstructor
+      fconstructor
+      intro x
+      refine (Bicategory.associator (f.app x) (g.app x) (h.app x)).inv
+      intros x y l
+      simp [CategoryStruct.comp,Pseudofunctor.StrongTrans.vcomp,Oplax.OplaxTrans.vcomp]
+    . dsimp [CategoryStruct.comp,Pseudofunctor.StrongTrans.Modification.vcomp]
+      congr
+      funext x
+      simp
+    . dsimp [CategoryStruct.comp,Pseudofunctor.StrongTrans.Modification.vcomp]
+      congr
+      funext x
+      simp
+  leftUnitor {a b} f := by
+    refine eqToIso ?_
+    congr
+
+  rightUnitor := by sorry
+  whiskerLeft_id := by sorry
+  whiskerLeft_comp := by sorry
+  comp_whiskerLeft := by sorry
+
+
+
+
+
+
+
+
+
+      -- refine (cancel_mono (f.app d ◁ (h.naturality t).hom)).mpr ?_
+      -- rw [whisker_exchange (f.naturality t).hom (ηa k)]
+      -- simp only [Category.assoc]
+      -- refine (cancel_epi ((f.naturality t).hom ▷ g.app k)).mpr ?_
+      -- exact associator_naturality_right (f.app d) (b.map t) (ηa k)
+
+
+
+
+        
+
+
+              
+
+
+
+    
+
+
+
   --   fconstructor
   --   fconstructor
   --   . intro d
